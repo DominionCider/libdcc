@@ -3,10 +3,14 @@
 OneWire  ds(ONE_WIRE_PIN);
 
 // Instruct all ds18b20 devices to take a measurement
-void takeAllMeasurements() {
+void takeAllMeasurementsAsync() {
   ds.reset();
   ds.skip();
   ds.write(0x44, 1); // Start conversion
+}
+
+void takeAllMeasurements() {
+  takeAllMeasurementsAsync();
   delay(800);
 }
 
