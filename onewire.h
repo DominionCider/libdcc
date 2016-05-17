@@ -55,6 +55,13 @@ int readTemperature(byte a[8], float *temp) {
     *temp *= -1;
   }
 
+  // The power-on value of the DS18B20's internal register
+  // is 85. If we read that or higher, let's just say it
+  // failed.
+  if (*temp >= 85.) {
+    return 0;
+  }
+
   return 1;
 }
 

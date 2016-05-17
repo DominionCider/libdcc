@@ -1,31 +1,25 @@
 #define TIMEOUT 5000
 
 // Make HTTP POST Request to InfluxDB
-void postRequest(String body, WiFiClient client) {
+void postRequestAsync(String body, WiFiClient client) {
   Serial.print("POST ");
   Serial.println(INFLUX_PATH);
   Serial.println(body);
 
-  client.print("POST ");
-  client.print(INFLUX_PATH);
-  client.print(" HTTP/1.1\r\n");
+  String out = String("POST ") + INFLUX_PATH + " HTTP/1.1\r\n";
+  out += String("Host: ") + INFLUX_HOSTNAME + ":" + INFLUX_PORT + "\r\n";
+  out += "User-Agent: ESP8266 Arduino\r\n";
+  out += "Accept: */*\r\n";
+  out += String("Content-Length: ") + body.length() + "\r\n\r\n";
+  out += body;
 
-  client.print("Host: ");
-  client.print(INFLUX_HOSTNAME);
-  client.print(":");
-  client.print(INFLUX_PORT);
-  client.print("\r\n");
+  client.print(out);
 
-  client.print("User-Agent: ESP8266 Arduino\r\n");
-  client.print("Accept: */*\r\n");
+  Serial.println("DONE POST");
+}
 
-  client.print("Content-Length: ");
-  client.print(body.length());
-  client.print("\r\n");
-
-  client.print("\r\n");
-  client.print(body);
-
+void postRequest(String body, WiFiClient client) {
+  postRequestAsync(body, client);
   for (int i=0; i<TIMEOUT; i+=50) {
     if (client.available()) {
       break;
