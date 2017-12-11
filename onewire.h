@@ -69,7 +69,7 @@ String addrToString(byte addr[8]) {
   char addr_hex[17];
   os_sprintf(
     addr_hex,
-    "%02X %02X %02X %02X %02X %02X %02X %02X",
+    "%02x%02x%02x%02x%02x%02x%02x%02x",
     addr[0],
     addr[1],
     addr[2],
