@@ -82,25 +82,20 @@ String addrToString(byte addr[8]) {
   return String(addr_hex);
 }
 
-// HTTP server handler which finds all sensors on the 1Wire bus
-// and takes their measurements.
-void handleSensors() {
-  REQUIRE_AUTH;
+void enumerateOneWire() {
 
   float f;
   byte addr[8];
-  String body = String("");
 
   takeAllMeasurements();
 
   ds.reset();
   while (ds.search(addr) == true) {
     if (readTemperature(addr, &f)) {
-      body += addrToString(addr) + ": " + String(f, 3) + "\n";
+      Serial.println(addrToString(addr) + ": " + String(f, 3));
     } else {
-      body += addrToString(addr) + ": failed to read\n";
+      Serial.println(addrToString(addr) + ": failed to read");
     }
   }
 
-  server.send(200, "text/plain", body);
 }
